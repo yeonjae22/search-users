@@ -3,8 +3,6 @@ package com.yeonberry.search_users.data.model
 import com.google.gson.annotations.SerializedName
 
 data class User(
-    @SerializedName("id")
-    val id: Int,
     @SerializedName("login")
     val username: String,
     @SerializedName("avatar_url")

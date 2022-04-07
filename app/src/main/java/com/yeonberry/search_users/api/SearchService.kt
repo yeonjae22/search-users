@@ -13,7 +13,7 @@ interface SearchService {
         @Query("q") q: String,
         @Query("sort") sort: String? = "best match",
         @Query("order") order: String? = "desc",
-        @Query("per_page") per_page: Int? = 30,
+        @Query("per_page") perPage: Int,
         @Query("page") page: Int
     ): Response<SearchResponse>
 }
