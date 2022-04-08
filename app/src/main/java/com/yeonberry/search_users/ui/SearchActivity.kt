@@ -10,6 +10,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
+import androidx.recyclerview.widget.RecyclerView
 import com.yeonberry.search_users.R
 import com.yeonberry.search_users.databinding.ActivitySearchBinding
 import com.yeonberry.search_users.util.VerticalSpaceItemDecoration
@@ -59,6 +60,14 @@ class SearchActivity : AppCompatActivity() {
                 binding.layoutEmpty.visibility = View.GONE
             }
         }
+
+        searchAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                if (positionStart == 0) {
+                    binding.rvSearch.scrollToPosition(0)
+                }
+            }
+        })
     }
 
     private fun initListener() {

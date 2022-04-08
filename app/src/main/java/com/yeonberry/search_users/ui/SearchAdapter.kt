@@ -10,9 +10,9 @@ import com.yeonberry.search_users.data.model.User
 import com.yeonberry.search_users.databinding.ItemSearchBinding
 
 class SearchAdapter(private val onItemClick: (User) -> Unit) :
-    PagingDataAdapter<User, RecyclerView.ViewHolder>(SearchDiffCallback()) {
+    PagingDataAdapter<User, SearchViewHolder>(SearchDiffCallback()) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
         return SearchViewHolder(
             ItemSearchBinding.inflate(
                 LayoutInflater.from(parent.context),
@@ -22,34 +22,32 @@ class SearchAdapter(private val onItemClick: (User) -> Unit) :
         )
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        (holder as? SearchViewHolder)?.bind(getItem(position) ?: return)
+    override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
+        getItem(position)?.let { holder.bind(it) }
     }
+}
 
-    class SearchViewHolder(
-        private val binding: ItemSearchBinding, val onItemClick: (User) -> Unit
-    ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: User) {
-            binding.root.setOnClickListener {
+class SearchViewHolder(
+    private val binding: ItemSearchBinding, val onItemClick: (User) -> Unit
+) : RecyclerView.ViewHolder(binding.root) {
+    fun bind(item: User) {
+        binding.apply {
+            root.setOnClickListener {
                 onItemClick(item)
             }
-            Glide.with(binding.ivImage)
+            Glide.with(ivImage)
                 .load(item.imageUrl)
                 .circleCrop()
-                .into(binding.ivImage)
-            binding.tvName.text = item.username
-            binding.tvUrl.text = item.url
+                .into(ivImage)
+            tvName.text = item.username
+            tvUrl.text = item.url
         }
     }
 }
 
 private class SearchDiffCallback : DiffUtil.ItemCallback<User>() {
 
-    override fun areItemsTheSame(oldItem: User, newItem: User): Boolean {
-        return oldItem == newItem
-    }
+    override fun areItemsTheSame(oldItem: User, newItem: User): Boolean = false
 
-    override fun areContentsTheSame(oldItem: User, newItem: User): Boolean {
-        return oldItem == newItem
-    }
+    override fun areContentsTheSame(oldItem: User, newItem: User): Boolean = false
 }
