@@ -4,6 +4,7 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.yeonberry.search_users.api.SearchService
 import com.yeonberry.search_users.data.model.User
+import com.yeonberry.search_users.util.PAGE_SIZE
 
 class SearchPagingSource(
     private val backend: SearchService,
@@ -19,7 +20,7 @@ class SearchPagingSource(
             LoadResult.Page(
                 data = response.body()?.items!!,
                 prevKey = if (nextPageNumber == 1) null else nextPageNumber - 1,
-                nextKey = if (response.body()?.items?.isEmpty() == true) null else nextPageNumber + (params.loadSize / 10)
+                nextKey = if (response.body()?.items?.isEmpty() == true) null else nextPageNumber + (params.loadSize / PAGE_SIZE)
             )
         } catch (e: Exception) {
             LoadResult.Error(e)
